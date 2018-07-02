@@ -70,6 +70,11 @@ if should_migrate; then
   fi
 fi
 
+if [[ -f "$APP_DB_IMPORTER"]]; then
+  echo "---> Import database ..."
+  python $APP_DB_IMPORTER
+fi
+
 if is_gunicorn_installed; then
   if [[ -z "$APP_MODULE" ]]; then
     # Look only in the directory specified by APP_HOME, or the current directory
