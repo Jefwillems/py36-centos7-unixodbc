@@ -70,7 +70,7 @@ if should_migrate; then
   fi
 fi
 
-if [[ -f "$APP_DB_IMPORTER"]]; then
+if [[ -f "$APP_DB_IMPORTER" ]]; then
   echo "---> Import database ..."
   python $APP_DB_IMPORTER
 fi
