@@ -37,13 +37,11 @@ RUN yum install -y https://dl.fedoraproject.org/pub/archive/epel/6/x86_64/Packag
 RUN yum install -y epel-release
 RUN rpm --import http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
 RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo > /etc/yum.repos.d/mssql-release.repo
-RUN ACCEPT_EULA=Y yum install -y msodbcsql17
-RUN ACCEPT_EULA=Y yum install -y mssql-tools
 RUN INSTALL_PKGS="rh-python36 rh-python36-python-devel rh-python36-python-setuptools rh-python36-python-pip nss_wrapper \
     httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap \
-    httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant unixODBC-devel freetds-devel" && \
+    httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl msodbcsql17 mssql-tools enchant unixODBC-devel freetds-devel" && \
     yum install -y centos-release-scl && \
-    yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
+    ACCEPT_EULA=Y yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     # Remove centos-logos (httpd dependency) to keep image size smaller.
     rpm -e --nodeps centos-logos && \
