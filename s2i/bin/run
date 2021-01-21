@@ -56,8 +56,11 @@ else
   test -n "$app_file_check" && (>&2 echo "ERROR: file '$app_file_check' not found.") && exit 1
 fi
 
-APP_HOME=${APP_HOME:-.src}
+APP_HOME=${APP_HOME:-.}
 # Look for 'manage.py' in the directory specified by APP_HOME, or the current direcotry
+echo "current dir:"
+pwd
+echo "Looking for 'manage.py' in $APP_HOME"
 manage_file=$APP_HOME/manage.py
 
 if should_migrate; then
