@@ -14,24 +14,24 @@ ENV PYTHON_VERSION=3.6 \
 
 ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
     DESCRIPTION="Python $PYTHON_VERSION available as container is a base platform for \
-building and running various Python $PYTHON_VERSION applications and frameworks. \
-Python is an easy to learn, powerful programming language. It has efficient high-level \
-data structures and a simple but effective approach to object-oriented programming. \
-Python's elegant syntax and dynamic typing, together with its interpreted nature, \
-make it an ideal language for scripting and rapid application development in many areas \
-on most platforms."
+    building and running various Python $PYTHON_VERSION applications and frameworks. \
+    Python is an easy to learn, powerful programming language. It has efficient high-level \
+    data structures and a simple but effective approach to object-oriented programming. \
+    Python's elegant syntax and dynamic typing, together with its interpreted nature, \
+    make it an ideal language for scripting and rapid application development in many areas \
+    on most platforms."
 
 LABEL summary="$SUMMARY" \
-      description="$DESCRIPTION" \
-      io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Python 3.6" \
-      io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python36,rh-python36" \
-      com.redhat.component="python36-container" \
-      name="phal/py36-centos7-unixodbc" \
-      version="1" \
-      usage="s2i build . phal/py36-centos7-unixodbc python-sample-app" \
-      maintainer="Jef Willems <willems.jef@outlook.com>"
+    description="$DESCRIPTION" \
+    io.k8s.description="$DESCRIPTION" \
+    io.k8s.display-name="Python 3.6" \
+    io.openshift.expose-services="8080:http" \
+    io.openshift.tags="builder,python,python36,rh-python36" \
+    com.redhat.component="python36-container" \
+    name="jefwillems/py36-centos7-unixodbc" \
+    version="1" \
+    usage="s2i build . jefwillems/py36-centos7-unixodbc python-sample-app" \
+    maintainer="Jef Willems <willems.jef@outlook.com>"
 
 RUN yum install -y http://dl.fedoraproject.org/pub/epel/6/x86_64/Packages/w/wv-1.2.7-2.el6.x86_64.rpm
 RUN yum install -y epel-release
@@ -40,8 +40,8 @@ RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo > /etc/yum.repos
 RUN ACCEPT_EULA=Y yum install msodbcsql17
 RUN ACCEPT_EULA=Y yum install mssql-tools
 RUN INSTALL_PKGS="rh-python36 rh-python36-python-devel rh-python36-python-setuptools rh-python36-python-pip nss_wrapper \
-        httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap \
-        httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant unixODBC-devel freetds-devel" && \
+    httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap \
+    httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant unixODBC-devel freetds-devel" && \
     yum install -y centos-release-scl && \
     yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
