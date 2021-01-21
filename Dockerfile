@@ -31,7 +31,7 @@ LABEL summary="$SUMMARY" \
       name="phal/py36-centos7-unixodbc" \
       version="1" \
       usage="s2i build . phal/py36-centos7-unixodbc python-sample-app" \
-      maintainer="philipp allgeuer <philipp.allgeuer@zumtobelgroup.com>"
+      maintainer="Jef Willems <willems.jef@outlook.com>"
 
 RUN yum install -y http://dl.fedoraproject.org/pub/epel/6/x86_64/Packages/w/wv-1.2.7-2.el6.x86_64.rpm
 RUN yum install -y epel-release
