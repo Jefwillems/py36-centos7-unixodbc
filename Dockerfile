@@ -39,7 +39,7 @@ RUN rpm --import http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
 RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo > /etc/yum.repos.d/mssql-release.repo
 RUN INSTALL_PKGS="rh-python36 rh-python36-python-devel rh-python36-python-setuptools rh-python36-python-pip nss_wrapper \
     httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap \
-    httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl msodbcsql17 mssql-tools enchant unixODBC-devel freetds-devel" && \
+    httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl msodbcsql17 mssql-tools enchant unixODBC-devel" && \
     yum install -y centos-release-scl && \
     ACCEPT_EULA=Y yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
@@ -66,10 +66,11 @@ RUN source scl_source enable rh-python36 && \
     rpm-file-permissions
 
 # Ensure that odbc is configured to work with freetds
-COPY freetds /tmp/freetds
+#COPY freetds /tmp/freetds
+#COPY odbc_mssql /tmp/odbc_mssql
 
-RUN cat /tmp/freetds >> /etc/odbcinst.ini && rm /tmp/freetds
-
+#RUN cat /tmp/freetds >> /etc/odbcinst.ini && rm /tmp/freetds
+#RUN cat /tmp/odbc_mssql >> /etc/odbcinst.ini && rm /tmp/odbc_mssql
 
 USER 1001
 
