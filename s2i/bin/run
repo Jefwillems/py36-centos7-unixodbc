@@ -92,7 +92,7 @@ if is_gunicorn_installed; then
   if [[ "$APP_MODULE" ]]; then
     export WEB_CONCURRENCY=${WEB_CONCURRENCY:-$(get_default_web_concurrency)}
 
-    echo "---> Serving application with gunicorn ($APP_MODULE) ..."
+    echo "---> Serving application with gunicorn ($APP_MODULE) and timeout 80 secs ..."
     exec gunicorn "$APP_MODULE" --bind=0.0.0.0:8000 --access-logfile=- --timeout 80 --config "$APP_CONFIG"
   fi
 fi
