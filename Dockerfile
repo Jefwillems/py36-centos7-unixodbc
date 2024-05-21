@@ -1,10 +1,10 @@
 # This image provides a Python 3.6 environment you can use to run your Python
 # applications.
-FROM centos/s2i-base-centos7
+FROM registry.access.redhat.com/ubi9/s2i-base@sha256:c7544ce1508d8b0bc41c326624257df5f9825175e65528470c27c36f9b48752d
 
 EXPOSE 8080
 
-ENV PYTHON_VERSION=3.6 \
+ENV PYTHON_VERSION=3.12 \
     PATH=$HOME/.local/bin/:$PATH \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
@@ -24,28 +24,24 @@ ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applicatio
 LABEL summary="$SUMMARY" \
     description="$DESCRIPTION" \
     io.k8s.description="$DESCRIPTION" \
-    io.k8s.display-name="Python 3.6" \
+    io.k8s.display-name="Python 3.12" \
     io.openshift.expose-services="8080:http" \
-    io.openshift.tags="builder,python,python36,rh-python36,s2i" \
-    com.redhat.component="python36-container" \
-    name="jefwillems/py36-centos7-unixodbc" \
+    io.openshift.tags="builder,python,python312,rh-python312,s2i" \
+    com.redhat.component="python312-container" \
+    name="jefwillems/py312-ubi9-unixodbc" \
     version="1" \
-    usage="s2i build . jefwillems/py36-centos7-unixodbc python-sample-app" \
+    usage="s2i build . jefwillems/py312-ubi9-unixodbc python-sample-app" \
     maintainer="Jef Willems <willems.jef@outlook.com>"
-
-RUN yum install -y https://dl.fedoraproject.org/pub/archive/epel/6/x86_64/Packages/w/wv-1.2.7-2.el6.x86_64.rpm
-RUN yum install -y epel-release
-RUN rpm --import http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
-RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo > /etc/yum.repos.d/mssql-release.repo
-RUN INSTALL_PKGS="rh-python36 rh-python36-python-devel rh-python36-python-setuptools rh-python36-python-pip nss_wrapper \
-    httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap \
-    httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl msodbcsql17 mssql-tools enchant unixODBC-devel" && \
-    yum install -y centos-release-scl && \
-    ACCEPT_EULA=Y yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
+#! 
+#RUN subscription-manager repos --enable codeready-builder-for-rhel-9-x86_64-rpms
+RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+RUN rpm --import http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9
+RUN curl https://packages.microsoft.com/config/rhel/9/prod.repo > /etc/yum.repos.d/mssql-release.repo
+RUN INSTALL_PKGS="python3.12 python3.12-devel python3.12-setuptools nss_wrapper atlas-devel gcc-gfortran libffi-devel libtool-ltdl msodbcsql17 mssql-tools enchant unixODBC-devel" && \
+    ACCEPT_EULA=Y yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    # Remove centos-logos (httpd dependency) to keep image size smaller.
-    rpm -e --nodeps centos-logos && \
     yum -y clean all --enablerepo='*'
+RUN yum remove -y nodejs less
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
@@ -59,10 +55,10 @@ COPY ./root/ /
 # - In order to drop the root user, we have to make some directories world
 #   writable as OpenShift default security model is to run the container
 #   under random UID.
-RUN source scl_source enable rh-python36 && \
-    virtualenv ${APP_ROOT} && \
-    chown -R 1001:0 ${APP_ROOT} && \
-    fix-permissions ${APP_ROOT} -P && \
+# RUN source scl_source enable python3.12 && \
+#     virtualenv ${APP_ROOT} && \
+#     chown -R 1001:0 ${APP_ROOT} && \
+RUN fix-permissions ${APP_ROOT} -P && \
     rpm-file-permissions
 
 # Ensure that odbc is configured to work with freetds
